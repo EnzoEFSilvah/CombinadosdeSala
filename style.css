@@ -1,0 +1,200 @@
+:root {
+    --bg-color: #2C3E50;
+    --card-bg: #34495e;
+    --text-color: #ecf0f1;
+    --acent-green: #2ecc71;
+    --acent-red: #e74c3c;
+    --accent-gold: #f1c40f;
+    --bar-bg: #1a252f;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    color: var(--accent-gold);
+    margin-bottom: 30px;
+    text-shadow: 2px px #000;
+}
+
+/*Grid dos Aluno*/
+.grid-alunos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/*Card do Aluno*/
+.card-aluno {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    margin-top: 15px;
+}
+
+.card-aluno:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-gold);
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 3px solid var(--accent-gold);
+    margin-bottom: 10px;
+}
+
+.nome {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.level-badge {
+    background-color: var(--accent-gold);
+    color: #000;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+/*Barra de Progresso*/
+.xp-container {
+    background-color: var(--bar-bg);
+    height: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 5px;
+}
+
+.xp-bar {
+    height: 100%;
+    background-color: var(--acent-green);
+    width: 0;
+    transition: width 0.5s ease-out;
+}
+
+.xp-text {
+    font-size: 0.8em;
+    margin-top: 5px;
+    color: #bdc3c7;
+}
+
+
+/* Modal de Ações */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    border: 2px solid var(--accent-gold);
+}
+
+.modal-title {
+    font-family: 'Press-Start 2P', cursive;
+    color: var(--accent-gold);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.actions-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.btn-action {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-positive {
+    background-color: #27ae60;
+    border-bottom: 4px solid #1e8449;
+}
+
+.btn-positive:active {
+    border-bottom: 0px;
+    transform: translateY(4px);
+}
+
+.btn-negative {
+    background-color: #c0392b;
+    border-bottom: 4px solid #922b21;
+}
+
+.btn-negative:active {
+    border-bottom: 0px;
+    transform: translateY(4px);
+}
+
+.btn-close {
+    margin-top: 15px;
+    background: transparent;
+    border: 1px solid #7f8c8d;
+    color: #bdc3c7;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/*Painel Admin*/
+.admin-panel {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn-admin {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+    
+}

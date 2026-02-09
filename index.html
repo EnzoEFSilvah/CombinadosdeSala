@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinados 2° Ano B</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>🎮 Combinados da sala</h1>
+
+    <div class="admin-panel">
+        <button class="btn-admin" onclick="adicionarAluno()">+ Novo Aluno</button>
+        <button class="btn-admin" onclick="resetarTudo()" style="background-color: #c0392b;">Resetar Tudo</button>
+    </div>
+
+    <div class="grid-alunos" id="gridAlunos"></div>
+
+    <div class="modal-overlay" id="modalAcoes">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalNomeAluno">Selecionar Ação</h2>
+
+            <div class="actions-grid" id="listaCombinados"></div>
+            <button class="btn-close" onclick="fecharModal()">Fechar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
