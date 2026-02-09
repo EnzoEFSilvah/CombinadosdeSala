@@ -16,27 +16,27 @@ const COMBINADOS = [
 
 // Estado da Aplicação
 let alunos = JSON.parse(localStorage.getItem("alunos")) || [
-    {id:1, nome: "Alice", xp: 0, level: 1},
-    {id:2, nome: "Alexsandro", xp: 0, level: 1},
-    {id:3, nome: "Ana Clara", xp: 0, level: 1},
-    {id:4, nome: "Arthur", xp: 0, level: 1},
-    {id:5, nome: "Carlito", xp: 0, level: 1},
-    {id:6, nome: "Dominic", xp: 0, level: 1},
-    {id:7, nome: "Edson", xp: 0, level: 1},
-    {id:8, nome: "Estevan", xp: 0, level: 1},
-    {id:9, nome: "Gregory", xp: 0, level: 1},
-    {id:10, nome: "Kimberly", xp: 0, level: 1},
-    {id:11, nome: "Lays", xp: 0, level: 1},
-    {id:12, nome: "Layslla", xp: 0, level: 1},
-    {id:13, nome: "Luis", xp: 0, level: 1},
-    {id:14, nome: "Matheus", xp: 0, level: 1},
-    {id:15, nome: "Murillo", xp: 0, level: 1},
-    {id:16, nome: "Ryan", xp: 0, level: 1},
-    {id:17, nome: "Sophia", xp: 0, level: 1},
-    {id:18, nome: "Valentina", xp: 0, level: 1},
-    {id:19, nome: "Vitorya", xp: 0, level: 1},
-    {id:20, nome: "Weiny", xp: 0, level: 1},
-    {id:21, nome: "Yohanna", xp: 0, level: 1},
+    {id:1, nome: "Alice", xp: 0, level: 1, genero:"F"},
+    {id:2, nome: "Alexsandro", xp: 0, level: 1, genero:"M"},
+    {id:3, nome: "Ana Clara", xp: 0, level: 1, genero:"F"},
+    {id:4, nome: "Arthur", xp: 0, level: 1, genero:"M"},
+    {id:5, nome: "Carlito", xp: 0, level: 1, genero:"M"},
+    {id:6, nome: "Dominic", xp: 0, level: 1, genero:"M"},
+    {id:7, nome: "Edson", xp: 0, level: 1, genero:"M"},
+    {id:8, nome: "Estevan", xp: 0, level: 1, genero:"M"},
+    {id:9, nome: "Gregory", xp: 0, level: 1, genero:"M"},
+    {id:10, nome: "Kimberly", xp: 0, level: 1, genero:"F"},
+    {id:11, nome: "Lays", xp: 0, level: 1, genero:"F"},
+    {id:12, nome: "Layslla", xp: 0, level: 1, genero:"F"},
+    {id:13, nome: "Luis", xp: 0, level: 1, genero:"M"},
+    {id:14, nome: "Matheus", xp: 0, level: 1, genero:"M"},
+    {id:15, nome: "Murillo", xp: 0, level: 1, genero:"M"},
+    {id:16, nome: "Ryan", xp: 0, level: 1, genero:"M"},
+    {id:17, nome: "Sophia", xp: 0, level: 1, genero:"F"},
+    {id:18, nome: "Valentina", xp: 0, level: 1, genero:"F"},
+    {id:19, nome: "Vitorya", xp: 0, level: 1, genero:"F"},
+    {id:20, nome: "Weiny", xp: 0, level: 1, genero:"F"},
+    {id:21, nome: "Yohanna", xp: 0, level: 1, genero:"F"},
 ];
 
 let alunoSelecionado = null;
@@ -56,8 +56,15 @@ function renderizarAlunos() {
         // Calculo da % da barra de progresso
         const porcentagem = (aluno.xp / XP_PARA_LEVEL_UP) * 100;
 
-        // Gerador de Avatar(Pixel Art)
-        const UrlAvatar = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${aluno.nome}`;
+        // AVATAR PADRÃO POR GÊNERO
+        let avatarUrl;
+        if (aluno.genero === 'F') {
+            // Imagem padrão para meninas
+            avatarUrl = "./img/feminino.jpg";
+        } else {
+            // Imagem padrão para meninos
+            avatarUrl = "./img/masculino.jpg";
+        }
 
         const card = document.createElement("div");
         card.className = "card-aluno";
@@ -65,7 +72,7 @@ function renderizarAlunos() {
 
         card.innerHTML = `
         <div class="level-badge">Nivel ${aluno.level}</div>
-        <img src="${UrlAvatar}" alt="${aluno.nome}" class="avatar">
+        <img src="${avatarUrl}" alt="${aluno.nome}" class="avatar">
         <div class="nome">${aluno.nome}</div>
         <div class="xp-container">
             <div class="xp-bar" style="width: ${porcentagem}%;"></div>
@@ -134,9 +141,18 @@ function aplicarAcao(valor) {
 
 function adicionarAluno() {
     const nome = prompt("Nome do novo aluno:");
+    if(!nome) return;
+
+    // Pergunta simples para o gênero do aluno
+    const generoInput = prompt("É menino ou menina? (Digite M ou F").toLocaleUpperCase(); 
+
+    // Validação simples (se digitar errado, vai como M padrão)
+    const genero = (generoInput === 'F') ? 'F' : 'M';
+
+
     if (nome) {
         const novoId = Date.now(); // ID único simples
-        alunos.push({id: novoId, nome: nome, xp: 0, level: 1});
+        alunos.push({id: novoId, nome: nome, xp: 0, level: 1, genero: genero});
         salvarDados();
 
     }
