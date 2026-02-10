@@ -4,14 +4,15 @@ const XP_PARA_LEVEL_UP = 100;
 // COMBINADOS(Regras) - Edite aqui os valores e descrições dos combinados
 const COMBINADOS = [
     {id:1, texto: "Fez a tarefa de casa", xp: 20, tipo: "bom"},
-    {id:2, texto: "Ajudou um colega", xp: 15, tipo: "bom"},
-    {id:3, texto: "Participou da aula", xp: 25, tipo: "bom"},
-    {id:4, texto: "Respeitou as regras da sala", xp: 10, tipo: "bom"},
-    {id:5, texto: "Conversa fora de hora", xp: 30, tipo: "ruim"},
-    {id:6, texto: "Não fez a tarefa de casa", xp: 20, tipo: "ruim"},
-    {id:7, texto: "Brigou um colega", xp: 25, tipo: "ruim"},
-    {id:8, texto: "Saiu sem pedir", xp: 15, tipo: "ruim"},
-    {id:9, texto: "Não trouxe o Material", xp: 30, tipo: "ruim"},
+    {id:2, texto: "Ajudou um colega", xp: 10, tipo: "bom"},
+    {id:3, texto: "Jogar o lixo na lixeira", xp: 10, tipo: "bom"},
+    {id:4, texto: "Andar em Fila", xp: 10, tipo: "bom"},
+    {id:5, texto: "Ser Educado", xp: 10, tipo: "bom"},
+    {id:6, texto: "Conversa fora de hora", xp: 10, tipo: "ruim"},
+    {id:7, texto: "Não fez a tarefa de casa", xp: 20, tipo: "ruim"},
+    {id:8, texto: "Brigou um colega", xp: 10, tipo: "ruim"},
+    {id:9, texto: "Saiu sem pedir", xp: 15, tipo: "ruim"},
+    {id:10, texto: "Não trouxe o Material", xp: 20, tipo: "ruim"},
 ];
 
 // Estado da Aplicação
