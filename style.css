@@ -24,13 +24,95 @@ h1 {
     text-shadow: 2px px #000;
 }
 
+/*Container Principal - Grid e Ranking lado a lado*/
+.container-principal {
+    display: flex;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+/*Card de Ranking*/
+.card-ranking {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--accent-gold);
+    min-width: 250px;
+    flex-shrink: 0;
+}
+
+.ranking-title {
+    font-family: 'Press Start 2P', cursive;
+    color: var(--accent-gold);
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 1.2rem;
+}
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ranking-item {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--accent-gold);
+    transition: transform 0.2s;
+}
+
+.ranking-item:hover {
+    transform: translateX(5px);
+}
+
+.ranking-item.primeiro {
+    border-left: 4px solid #f39c12;
+    background-color: rgba(243, 156, 18, 0.2);
+}
+
+.ranking-item.segundo {
+    border-left: 4px solid #95a5a6;
+    background-color: rgba(149, 165, 166, 0.2);
+}
+
+.ranking-item.terceiro {
+    border-left: 4px solid #cd7f32;
+    background-color: rgba(205, 127, 50, 0.2);
+}
+
+.ranking-posicao {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    min-width: 30px;
+    text-align: center;
+}
+
+.ranking-nome {
+    flex: 1;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.ranking-xp {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    color: var(--acent-green);
+}
+
 /*Grid dos Aluno*/
 .grid-alunos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    flex: 1;
 }
 
 /*Card do Aluno*/

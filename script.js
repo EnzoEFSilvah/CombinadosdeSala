@@ -47,6 +47,7 @@ let alunoSelecionado = null;
 function salvarDados() {
     localStorage.setItem("alunos", JSON.stringify(alunos));
     renderizarAlunos();
+    renderizarRanking();
 }
 
 function renderizarAlunos() {
@@ -82,6 +83,49 @@ function renderizarAlunos() {
         `;
 
         grind.appendChild(card);
+    });
+}
+
+function renderizarRanking() {
+    const rankingList = document.getElementById("rankingList");
+    rankingList.innerHTML = "";
+
+    // Ordena alunos por XP + (level * XP_PARA_LEVEL_UP) e pega os 5 primeiros
+    const top5 = [...alunos]
+        .sort((a, b) => {
+            const xpTotalA = a.xp + (a.level * XP_PARA_LEVEL_UP);
+            const xpTotalB = b.xp + (b.level * XP_PARA_LEVEL_UP);
+            return xpTotalB - xpTotalA;
+        })
+        .slice(0, 5);
+
+    top5.forEach((aluno, index) => {
+        const xpTotal = aluno.xp + (aluno.level * XP_PARA_LEVEL_UP);
+        const posicao = index + 1;
+        let medalha = '';
+        let classe = '';
+
+        if (posicao === 1) {
+            medalha = '🥇';
+            classe = 'primeiro';
+        } else if (posicao === 2) {
+            medalha = '🥈';
+            classe = 'segundo';
+        } else if (posicao === 3) {
+            medalha = '🥉';
+            classe = 'terceiro';
+        } else {
+            medalha = `#${posicao}`;
+        }
+
+        const item = document.createElement("div");
+        item.className = `ranking-item ${classe}`;
+        item.innerHTML = `
+            <span class="ranking-posicao">${medalha}</span>
+            <span class="ranking-nome">${aluno.nome}</span>
+            <span class="ranking-xp">Lv.${aluno.level} +${aluno.xp}XP</span>
+        `;
+        rankingList.appendChild(item);
     });
 }
 
@@ -169,3 +213,4 @@ function resetarTudo(){
 
 // INICIALIZAÇÃO
 renderizarAlunos();
+renderizarRanking();
