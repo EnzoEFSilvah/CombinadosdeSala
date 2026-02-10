@@ -60,10 +60,10 @@ function renderizarAlunos() {
         let avatarUrl;
         if (aluno.genero === 'F') {
             // Imagem padrão para meninas
-            avatarUrl = "feminino.jpg";
+            avatarUrl = "./img/feminino.jpg";
         } else {
             // Imagem padrão para meninos
-            avatarUrl = "masculino.jpg";
+            avatarUrl = "./img/masculino.jpg";
         }
 
         const card = document.createElement("div");
