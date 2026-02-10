@@ -33,6 +33,13 @@ h1 {
     align-items: flex-start;
 }
 
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
 /*Card de Ranking*/
 .card-ranking {
     background-color: var(--card-bg);
@@ -105,6 +112,75 @@ h1 {
     font-family: 'Press Start 2P', cursive;
     font-size: 0.8rem;
     color: var(--acent-green);
+}
+
+/*Card de Combinados*/
+.card-combinados {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--accent-gold);
+    min-width: 250px;
+    flex-shrink: 0;
+}
+
+.combinados-title {
+    font-family: 'Press Start 2P', cursive;
+    color: var(--accent-gold);
+    text-align: center;
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+}
+
+.combinados-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.combinado-item {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    border-left: 3px solid transparent;
+}
+
+.combinado-item.bom {
+    border-left-color: var(--acent-green);
+}
+
+.combinado-item.ruim {
+    border-left-color: var(--acent-red);
+}
+
+.combinado-texto {
+    flex: 1;
+    font-weight: 500;
+}
+
+.combinado-xp {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.combinado-xp.bom {
+    background-color: rgba(46, 204, 113, 0.3);
+    color: var(--acent-green);
+}
+
+.combinado-xp.ruim {
+    background-color: rgba(231, 76, 60, 0.3);
+    color: var(--acent-red);
 }
 
 /*Grid dos Aluno*/

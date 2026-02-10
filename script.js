@@ -48,6 +48,7 @@ function salvarDados() {
     localStorage.setItem("alunos", JSON.stringify(alunos));
     renderizarAlunos();
     renderizarRanking();
+    renderizarCombinados();
 }
 
 function renderizarAlunos() {
@@ -90,8 +91,9 @@ function renderizarRanking() {
     const rankingList = document.getElementById("rankingList");
     rankingList.innerHTML = "";
 
-    // Ordena alunos por XP + (level * XP_PARA_LEVEL_UP) e pega os 5 primeiros
+    // Filtra apenas alunos com XP > 0, ordena por XP + (level * XP_PARA_LEVEL_UP) e pega os 5 primeiros
     const top5 = [...alunos]
+        .filter(a => a.xp > 0)
         .sort((a, b) => {
             const xpTotalA = a.xp + (a.level * XP_PARA_LEVEL_UP);
             const xpTotalB = b.xp + (b.level * XP_PARA_LEVEL_UP);
@@ -126,6 +128,24 @@ function renderizarRanking() {
             <span class="ranking-xp">Lv.${aluno.level} +${aluno.xp}XP</span>
         `;
         rankingList.appendChild(item);
+    });
+}
+
+function renderizarCombinados() {
+    const combinadosList = document.getElementById("combinadosList");
+    combinadosList.innerHTML = "";
+
+    COMBINADOS.forEach(comb => {
+        const item = document.createElement("div");
+        item.className = `combinado-item ${comb.tipo}`;
+        
+        const sinal = comb.tipo === "bom" ? '+' : '-';
+        
+        item.innerHTML = `
+            <span class="combinado-texto">${comb.texto}</span>
+            <span class="combinado-xp ${comb.tipo}">${sinal}${comb.xp} XP</span>
+        `;
+        combinadosList.appendChild(item);
     });
 }
 
@@ -214,3 +234,4 @@ function resetarTudo(){
 // INICIALIZAÇÃO
 renderizarAlunos();
 renderizarRanking();
+renderizarCombinados();
