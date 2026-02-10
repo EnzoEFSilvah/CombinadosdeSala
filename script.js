@@ -97,12 +97,13 @@ function abrirModal(id) {
     COMBINADOS.forEach(comb => {
         const btn = document.createElement("button");
         const classeTipo = comb.tipo === "bom" ? 'btn-positive' : 'btn-negative';
-        const sinal = comb.xp > 0 ? '+': '';
+        const sinal = comb.tipo === "bom" ? '+' : '-';
+        const xpValue = comb.tipo === "bom" ? comb.xp : -comb.xp;
 
         btn.className = `btn-action ${classeTipo}`;
         btn.innerHTML = `<span>${comb.texto}</span>
         <span>${sinal}${comb.xp} XP</span>`;
-        btn.onclick = () => aplicarAcao(comb.xp);
+        btn.onclick = () => aplicarAcao(xpValue);
 
         lista.appendChild(btn);
     });
