@@ -1,8 +1,8 @@
 // CONFIGURAÇÕES INICIAIS
 const XP_PARA_LEVEL_UP = 100;
 
-// COMBINADOS(Regras) - Edite aqui os valores e descrições dos combinados
-const COMBINADOS = [
+// COMBINADOS(Regras) - Editável e salvo no localStorage
+let COMBINADOS = JSON.parse(localStorage.getItem("combinados")) || [
     {id:1, texto: "Fez a tarefa de casa", xp: 20, tipo: "bom"},
     {id:2, texto: "Ajudou um colega", xp: 10, tipo: "bom"},
     {id:3, texto: "Jogar o lixo na lixeira", xp: 10, tipo: "bom"},
@@ -46,6 +46,7 @@ let alunoSelecionado = null;
 
 function salvarDados() {
     localStorage.setItem("alunos", JSON.stringify(alunos));
+    localStorage.setItem("combinados", JSON.stringify(COMBINADOS));
     renderizarAlunos();
     renderizarRanking();
     renderizarCombinados();
@@ -71,11 +72,16 @@ function renderizarAlunos() {
 
         const card = document.createElement("div");
         card.className = "card-aluno";
-        card.onclick = () => abrirModal(aluno.id);
 
         card.innerHTML = `
         <div class="level-badge">Nivel ${aluno.level}</div>
-        <img src="${avatarUrl}" alt="${aluno.nome}" class="avatar">
+        <div class="avatar-container">
+            <img src="${avatarUrl}" alt="${aluno.nome}" class="avatar" onclick="abrirModal(${aluno.id})">
+            <div class="avatar-buttons">
+                <button class="btn-edit" onclick="editarAluno(${aluno.id})" title="Editar">✏️</button>
+                <button class="btn-delete" onclick="deletarAluno(${aluno.id})" title="Deletar">🗑️</button>
+            </div>
+        </div>
         <div class="nome">${aluno.nome}</div>
         <div class="xp-container">
             <div class="xp-bar" style="width: ${porcentagem}%;"></div>
@@ -206,29 +212,116 @@ function aplicarAcao(valor) {
 
 
 function adicionarAluno() {
-    const nome = prompt("Nome do novo aluno:");
-    if(!nome) return;
-
-    // Pergunta simples para o gênero do aluno
-    const generoInput = prompt("É menino ou menina? (Digite M ou F").toLocaleUpperCase(); 
-
-    // Validação simples (se digitar errado, vai como M padrão)
-    const genero = (generoInput === 'F') ? 'F' : 'M';
-
-
-    if (nome) {
-        const novoId = Date.now(); // ID único simples
-        alunos.push({id: novoId, nome: nome, xp: 0, level: 1, genero: genero});
-        salvarDados();
-
-    }
+    // Mantido para compatibilidade; abre o formulário
+    abrirFormAluno();
 }
 
 function resetarTudo(){
     if(confirm("Tem certeza que deseja resetar todos os dados? Esta ação não pode ser desfeita.")) {
         localStorage.removeItem("alunos");
+        localStorage.removeItem("combinados");
         location.reload();
     }
+}
+
+// Funções de Editar e Deletar Aluno
+function editarAluno(id) {
+    const aluno = alunos.find(a => a.id === id);
+    if (!aluno) return;
+    
+    document.getElementById('modalAluno').style.dataset_edit_id = id;
+    document.getElementById('inputNomeAluno').value = aluno.nome;
+    document.getElementById('inputXPAluno').value = aluno.xp;
+    document.getElementById('inputLevelAluno').value = aluno.level;
+    document.getElementById('inputGeneroAluno').value = aluno.genero;
+    
+    // Muda o título e o comportamento do botão salvar
+    const modal = document.getElementById('modalAluno');
+    modal.dataset.editId = id;
+    modal.querySelector('.modal-title').innerText = 'Editar Aluno';
+    
+    document.getElementById('modalAluno').style.display = 'flex';
+}
+
+function deletarAluno(id) {
+    const aluno = alunos.find(a => a.id === id);
+    if (!aluno) return;
+    
+    if (confirm(`Tem certeza que deseja deletar ${aluno.nome}? Esta ação não pode ser desfeita.`)) {
+        alunos = alunos.filter(a => a.id !== id);
+        salvarDados();
+    }
+}
+
+// Funções do formulário de Aluno
+function abrirFormAluno() {
+    document.getElementById('inputNomeAluno').value = '';
+    document.getElementById('inputXPAluno').value = 0;
+    document.getElementById('inputLevelAluno').value = 1;
+    document.getElementById('inputGeneroAluno').value = 'M';
+    
+    // Reseta o modo editar
+    const modal = document.getElementById('modalAluno');
+    modal.dataset.editId = '';
+    modal.querySelector('.modal-title').innerText = 'Trazer Aluno';
+    
+    document.getElementById('modalAluno').style.display = 'flex';
+}
+
+function fecharModalAluno() {
+    document.getElementById('modalAluno').style.display = 'none';
+}
+
+function salvarAlunoFromForm() {
+    const nome = document.getElementById('inputNomeAluno').value.trim();
+    const xp = parseInt(document.getElementById('inputXPAluno').value, 10) || 0;
+    const level = parseInt(document.getElementById('inputLevelAluno').value, 10) || 1;
+    const genero = document.getElementById('inputGeneroAluno').value || 'M';
+
+    if (!nome) { alert('Nome é obrigatório.'); return; }
+
+    const modal = document.getElementById('modalAluno');
+    const editId = modal.dataset.editId;
+    
+    if (editId) {
+        // Modo editar - atualizar aluno existente
+        const index = alunos.findIndex(a => a.id === parseInt(editId, 10));
+        if (index !== -1) {
+            alunos[index] = {id: alunos[index].id, nome: nome, xp: xp, level: level, genero: genero};
+        }
+    } else {
+        // Modo adicionar - novo aluno
+        const novoId = Date.now();
+        alunos.push({id: novoId, nome: nome, xp: xp, level: level, genero: genero});
+    }
+    
+    salvarDados();
+    fecharModalAluno();
+}
+
+// Funções do formulário de Combinado
+function abrirFormCombinado() {
+    document.getElementById('inputTextoCombinado').value = '';
+    document.getElementById('inputXPCombinado').value = 10;
+    document.getElementById('inputTipoCombinado').value = 'bom';
+    document.getElementById('modalCombinado').style.display = 'flex';
+}
+
+function fecharModalCombinado() {
+    document.getElementById('modalCombinado').style.display = 'none';
+}
+
+function salvarCombinadoFromForm() {
+    const texto = document.getElementById('inputTextoCombinado').value.trim();
+    const xp = parseInt(document.getElementById('inputXPCombinado').value, 10) || 0;
+    const tipo = document.getElementById('inputTipoCombinado').value || 'bom';
+
+    if (!texto) { alert('Texto é obrigatório.'); return; }
+
+    const novoId = Date.now();
+    COMBINADOS.push({id: novoId, texto: texto, xp: xp, tipo: tipo});
+    salvarDados();
+    fecharModalCombinado();
 }
 
 // INICIALIZAÇÃO

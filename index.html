@@ -11,7 +11,8 @@
     <h1>🎮 Combinados da sala</h1>
 
     <div class="admin-panel">
-        <button class="btn-admin" onclick="adicionarAluno()">+ Novo Aluno</button>
+        <button class="btn-admin" onclick="abrirFormAluno()">Adicionar Aluno</button>
+        <button class="btn-admin" onclick="abrirFormCombinado()">Adicionar Combinado</button>
         <button class="btn-admin" onclick="resetarTudo()" style="background-color: #c0392b;">Resetar Tudo</button>
     </div>
 
@@ -35,6 +36,62 @@
 
             <div class="actions-grid" id="listaCombinados"></div>
             <button class="btn-close" onclick="fecharModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar/editar Aluno -->
+    <div class="modal-overlay" id="modalAluno" style="display:none;">
+        <div class="modal-content">
+            <h2 class="modal-title">Trazer Aluno</h2>
+            <div class="form-row">
+                <label>Nome</label>
+                <input type="text" id="inputNomeAluno">
+            </div>
+            <div class="form-row">
+                <label>XP</label>
+                <input type="number" id="inputXPAluno" min="0" value="0">
+            </div>
+            <div class="form-row">
+                <label>Level</label>
+                <input type="number" id="inputLevelAluno" min="1" value="1">
+            </div>
+            <div class="form-row">
+                <label>Gênero</label>
+                <select id="inputGeneroAluno">
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                </select>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+                <button class="btn-admin" onclick="salvarAlunoFromForm()">Salvar</button>
+                <button class="btn-admin" onclick="fecharModalAluno()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar Combinado -->
+    <div class="modal-overlay" id="modalCombinado" style="display:none;">
+        <div class="modal-content">
+            <h2 class="modal-title">Adicionar Combinado</h2>
+            <div class="form-row">
+                <label>Texto</label>
+                <input type="text" id="inputTextoCombinado">
+            </div>
+            <div class="form-row">
+                <label>XP</label>
+                <input type="number" id="inputXPCombinado" min="0" value="10">
+            </div>
+            <div class="form-row">
+                <label>Tipo</label>
+                <select id="inputTipoCombinado">
+                    <option value="bom">bom</option>
+                    <option value="ruim">ruim</option>
+                </select>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+                <button class="btn-admin" onclick="salvarCombinadoFromForm()">Salvar</button>
+                <button class="btn-admin" onclick="fecharModalCombinado()">Cancelar</button>
+            </div>
         </div>
     </div>
 
