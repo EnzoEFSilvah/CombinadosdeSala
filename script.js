@@ -35,9 +35,10 @@ let alunos = JSON.parse(localStorage.getItem("alunos")) || [
     {id:16, nome: "Ryan", xp: 0, level: 1, genero:"M"},
     {id:17, nome: "Sophia", xp: 0, level: 1, genero:"F"},
     {id:18, nome: "Valentina", xp: 0, level: 1, genero:"F"},
-    {id:19, nome: "Vitorya", xp: 0, level: 1, genero:"F"},
-    {id:20, nome: "Weiny", xp: 0, level: 1, genero:"F"},
-    {id:21, nome: "Yohanna", xp: 0, level: 1, genero:"F"},
+    {id:19, nome: "Victor", xp: 0, level: 1, genero:"M"},
+    {id:20, nome: "Vitorya", xp: 0, level: 1, genero:"F"},
+    {id:21, nome: "Weiny", xp: 0, level: 1, genero:"F"},
+    {id:22, nome: "Yohanna", xp: 0, level: 1, genero:"F"},
 ];
 
 let alunoSelecionado = null;
