@@ -43,6 +43,20 @@ let alunos = JSON.parse(localStorage.getItem("alunos")) || [
 
 let alunoSelecionado = null;
 
+// Garantir que cada aluno tenha um histórico e migrar dados antigos
+alunos = alunos.map(aluno => {
+    if (!Array.isArray(aluno.historico)) {
+        const totalHistorico = ((aluno.level || 1) - 1) * XP_PARA_LEVEL_UP + (aluno.xp || 0);
+        aluno.historico = [];
+        if (totalHistorico > 0) {
+            aluno.historico.push({ id: Date.now() + Math.floor(Math.random()*1000), valor: totalHistorico, texto: 'Importado', timestamp: new Date().toISOString() });
+        }
+    }
+    // Recalcula level e xp a partir do histórico
+    recomputarAlunoPorHistorico(aluno);
+    return aluno;
+});
+
 // FUNÇÕES PRINCIPAIS
 
 function salvarDados() {
@@ -51,6 +65,12 @@ function salvarDados() {
     renderizarAlunos();
     renderizarRanking();
     renderizarCombinados();
+}
+
+function recomputarAlunoPorHistorico(aluno) {
+    const total = Math.max(0, aluno.historico.reduce((s, r) => s + (Number(r.valor) || 0), 0));
+    aluno.level = 1 + Math.floor(total / XP_PARA_LEVEL_UP);
+    aluno.xp = total % XP_PARA_LEVEL_UP;
 }
 
 function renderizarAlunos() {
@@ -77,8 +97,9 @@ function renderizarAlunos() {
         card.innerHTML = `
         <div class="level-badge">Nivel ${aluno.level}</div>
         <div class="avatar-container">
-            <img src="${avatarUrl}" alt="${aluno.nome}" class="avatar" onclick="abrirModal(${aluno.id})">
+            <img src="${avatarUrl}" alt="${aluno.nome}" class="avatar" onclick="abrirHistorico(${aluno.id})">
             <div class="avatar-buttons">
+                <button class="btn-action-small" onclick="abrirModal(${aluno.id})" title="Ações">⚡</button>
                 <button class="btn-edit" onclick="editarAluno(${aluno.id})" title="Editar">✏️</button>
                 <button class="btn-delete" onclick="deletarAluno(${aluno.id})" title="Deletar">🗑️</button>
             </div>
@@ -174,7 +195,7 @@ function abrirModal(id) {
         btn.className = `btn-action ${classeTipo}`;
         btn.innerHTML = `<span>${comb.texto}</span>
         <span>${sinal}${comb.xp} XP</span>`;
-        btn.onclick = () => aplicarAcao(xpValue);
+        btn.onclick = () => aplicarAcao(xpValue, comb.texto);
 
         lista.appendChild(btn);
     });
@@ -188,28 +209,106 @@ function fecharModal() {
     alunoSelecionado = null;
 }
 
-function aplicarAcao(valor) {
+function aplicarAcao(valor, texto) {
     const index = alunos.findIndex(a => a.id === alunoSelecionado);
     if (index !== -1) {
         let aluno = alunos[index];
-        aluno.xp += valor;
 
-        // Lógica de Level Up
-        if(aluno.xp >= XP_PARA_LEVEL_UP) {
-            aluno.xp = aluno.xp - XP_PARA_LEVEL_UP;
-            aluno.level += 1;
-            alert(`🎉 LEVEL UP! ${aluno.nome} subiu para o nível ${aluno.level}!`);
-        }
+        // Cria registro no histórico
+        const registro = {
+            id: Date.now() + Math.floor(Math.random()*1000),
+            valor: Number(valor) || 0,
+            texto: texto || 'Ação',
+            timestamp: new Date().toISOString()
+        };
+        aluno.historico.push(registro);
 
-        // Lógica para não deixar XP negativo
-        if(aluno.xp < 0) {
-            aluno.xp = 0;
-        }
+        // Recalcula level/xp a partir do histórico (ganhos acumulados)
+        recomputarAlunoPorHistorico(aluno);
+
+        // Notifica se houve level up
+        // Calcula total antes e depois para detectar mudança de nível
+        // (opcional)
 
         salvarDados();
         fecharModal();
     }
-} 
+}
+
+// Abre modal de histórico do aluno
+function abrirHistorico(id) {
+    alunoSelecionado = id;
+    const aluno = alunos.find(a => a.id === id);
+    if (!aluno) return;
+
+    document.getElementById('modalNomeHistorico').innerText = `Histórico: ${aluno.nome}`;
+    renderizarHistorico(aluno);
+    document.getElementById('modalHistorico').style.display = 'flex';
+}
+
+function fecharHistorico() {
+    document.getElementById('modalHistorico').style.display = 'none';
+    alunoSelecionado = null;
+}
+
+function renderizarHistorico(aluno) {
+    const list = document.getElementById('historicoList');
+    list.innerHTML = '';
+    if (!aluno.historico) aluno.historico = [];
+
+    // Mostra em ordem cronológica reversa (mais recente primeiro)
+    [...aluno.historico].reverse().forEach(reg => {
+        const el = document.createElement('div');
+        el.className = 'historico-item';
+        const sinal = reg.valor >= 0 ? '+' : '-';
+        const valorAbs = Math.abs(reg.valor);
+        const data = new Date(reg.timestamp).toLocaleString();
+        el.innerHTML = `
+            <div class="hist-text"><strong>${sinal}${valorAbs} XP</strong> — ${reg.texto}<br><small>${data}</small></div>
+            <div class="hist-actions">
+                <button onclick="editarRegistro(${aluno.id}, ${reg.id})">✏️</button>
+                <button onclick="deletarRegistro(${aluno.id}, ${reg.id})">🗑️</button>
+            </div>
+        `;
+        list.appendChild(el);
+    });
+}
+
+function editarRegistro(alunoId, registroId) {
+    const aluno = alunos.find(a => a.id === alunoId);
+    if (!aluno) return;
+    const idx = aluno.historico.findIndex(r => r.id === registroId);
+    if (idx === -1) return;
+    const reg = aluno.historico[idx];
+
+    const novoTexto = prompt('Editar descrição:', reg.texto);
+    if (novoTexto === null) return; // cancel
+    const novoValorRaw = prompt('Editar valor (use - para debitar):', String(reg.valor));
+    if (novoValorRaw === null) return;
+    const novoValor = Number(novoValorRaw);
+    if (isNaN(novoValor)) { alert('Valor inválido'); return; }
+
+    reg.texto = novoTexto;
+    reg.valor = novoValor;
+    reg.timestamp = new Date().toISOString();
+
+    recomputarAlunoPorHistorico(aluno);
+    salvarDados();
+    renderizarHistorico(aluno);
+}
+
+function deletarRegistro(alunoId, registroId) {
+    const aluno = alunos.find(a => a.id === alunoId);
+    if (!aluno) return;
+    const idx = aluno.historico.findIndex(r => r.id === registroId);
+    if (idx === -1) return;
+    if (!confirm('Confirma excluir este registro?')) return;
+
+    aluno.historico.splice(idx, 1);
+    recomputarAlunoPorHistorico(aluno);
+    salvarDados();
+    renderizarHistorico(aluno);
+}
 
 
 function adicionarAluno() {

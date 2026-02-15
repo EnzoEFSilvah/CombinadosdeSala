@@ -398,6 +398,44 @@ h1 {
     #modalCombinado .modal-content {
         width: 480px;
     }
+
+}
+
+/* Botão de ação pequeno no card do aluno */
+.btn-action-small {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(41, 128, 185, 0.8);
+    color: #fff;
+}
+
+/* Histórico */
+.historico-item {
+    background: rgba(0,0,0,0.25);
+    padding: 8px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.historico-item .hist-text small { color: #bdc3c7; }
+.historico-item .hist-actions button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 6px;
+}
 }
 
 .modal-title {
