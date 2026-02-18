@@ -7,7 +7,7 @@ let COMBINADOS = JSON.parse(localStorage.getItem("combinados")) || [
     {id:2, texto: "Ajudou um colega", xp: 10, tipo: "bom"},
     {id:3, texto: "Jogar o lixo na lixeira", xp: 10, tipo: "bom"},
     {id:4, texto: "Andar em Fila", xp: 10, tipo: "bom"},
-    {id:5, texto: "Ser Educado", xp: 10, tipo: "bom"},
+    {id:5, texto: "Se comportar no recreio", xp: 10, tipo: "bom"},
     {id:6, texto: "Conversa fora de hora", xp: 10, tipo: "ruim"},
     {id:7, texto: "Não fez a tarefa de casa", xp: 20, tipo: "ruim"},
     {id:8, texto: "Brigou um colega", xp: 10, tipo: "ruim"},
@@ -166,12 +166,16 @@ function renderizarCombinados() {
     COMBINADOS.forEach(comb => {
         const item = document.createElement("div");
         item.className = `combinado-item ${comb.tipo}`;
-        
+
         const sinal = comb.tipo === "bom" ? '+' : '-';
-        
+
         item.innerHTML = `
             <span class="combinado-texto">${comb.texto}</span>
             <span class="combinado-xp ${comb.tipo}">${sinal}${comb.xp} XP</span>
+            <div class="combinado-actions">
+                <button class="btn-edit" onclick="abrirFormCombinado(${comb.id})" title="Editar">✏️</button>
+                <button class="btn-delete" onclick="deletarCombinado(${comb.id})" title="Deletar">🗑️</button>
+            </div>
         `;
         combinadosList.appendChild(item);
     });
@@ -401,10 +405,25 @@ function salvarAlunoFromForm() {
 
 // Funções do formulário de Combinado
 function abrirFormCombinado() {
-    document.getElementById('inputTextoCombinado').value = '';
-    document.getElementById('inputXPCombinado').value = 10;
-    document.getElementById('inputTipoCombinado').value = 'bom';
-    document.getElementById('modalCombinado').style.display = 'flex';
+    // Suporta abrir em modo novo ou editar: se um id for passado, preenche o formulário
+    const editId = arguments[0];
+    const modal = document.getElementById('modalCombinado');
+    if (editId) {
+        const comb = COMBINADOS.find(c => c.id === editId);
+        if (!comb) return;
+        document.getElementById('inputTextoCombinado').value = comb.texto;
+        document.getElementById('inputXPCombinado').value = comb.xp;
+        document.getElementById('inputTipoCombinado').value = comb.tipo;
+        modal.dataset.editId = editId;
+        modal.querySelector('.modal-title').innerText = 'Editar Combinado';
+    } else {
+        document.getElementById('inputTextoCombinado').value = '';
+        document.getElementById('inputXPCombinado').value = 10;
+        document.getElementById('inputTipoCombinado').value = 'bom';
+        modal.dataset.editId = '';
+        modal.querySelector('.modal-title').innerText = 'Adicionar Combinado';
+    }
+    modal.style.display = 'flex';
 }
 
 function fecharModalCombinado() {
@@ -418,10 +437,29 @@ function salvarCombinadoFromForm() {
 
     if (!texto) { alert('Texto é obrigatório.'); return; }
 
-    const novoId = Date.now();
-    COMBINADOS.push({id: novoId, texto: texto, xp: xp, tipo: tipo});
+    const modal = document.getElementById('modalCombinado');
+    const editId = modal.dataset.editId;
+    if (editId) {
+        const index = COMBINADOS.findIndex(c => c.id === Number(editId));
+        if (index !== -1) {
+            COMBINADOS[index].texto = texto;
+            COMBINADOS[index].xp = xp;
+            COMBINADOS[index].tipo = tipo;
+        }
+    } else {
+        const novoId = Date.now();
+        COMBINADOS.push({id: novoId, texto: texto, xp: xp, tipo: tipo});
+    }
     salvarDados();
     fecharModalCombinado();
+}
+
+function deletarCombinado(id) {
+    const comb = COMBINADOS.find(c => c.id === id);
+    if (!comb) return;
+    if (!confirm(`Confirma excluir o combinado: "${comb.texto}"?`)) return;
+    COMBINADOS = COMBINADOS.filter(c => c.id !== id);
+    salvarDados();
 }
 
 // INICIALIZAÇÃO

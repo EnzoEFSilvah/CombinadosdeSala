@@ -137,7 +137,7 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 480px;
+    max-height: 560px;
     overflow-y: auto;
 }
 
@@ -181,6 +181,61 @@ h1 {
 .combinado-xp.ruim {
     background-color: rgba(231, 76, 60, 0.3);
     color: var(--acent-red);
+}
+
+/* Ajustes para ações (editar / deletar) dentro dos combinados */
+.combinado-item {
+    padding-right: 8px; /* espaço para os botões */
+}
+
+.combinado-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.combinado-item .btn-edit,
+.combinado-item .btn-delete {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+
+.combinado-item .btn-edit {
+    background-color: rgba(46, 204, 113, 0.85);
+    color: #0b2;
+}
+
+.combinado-item .btn-edit:hover {
+    background-color: var(--acent-green);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.combinado-item .btn-delete {
+    background-color: rgba(231, 76, 60, 0.85);
+    color: #fff;
+}
+
+.combinado-item .btn-delete:hover {
+    background-color: var(--acent-red);
+    transform: scale(1.05);
+}
+
+/* garantir texto e xp se comportem bem com os botões */
+.combinado-texto {
+    margin-right: 8px;
+    word-break: break-word;
 }
 
 /*Grid dos Aluno*/
