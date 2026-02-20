@@ -7,7 +7,7 @@ let COMBINADOS = JSON.parse(localStorage.getItem("combinados")) || [
     {id:2, texto: "Ajudou um colega", xp: 10, tipo: "bom"},
     {id:3, texto: "Jogar o lixo na lixeira", xp: 10, tipo: "bom"},
     {id:4, texto: "Andar em Fila", xp: 10, tipo: "bom"},
-    {id:5, texto: "Se comportar no recreio", xp: 10, tipo: "bom"},
+    {id:5, texto: "Fazer as Atividades", xp: 10, tipo: "bom"},
     {id:6, texto: "Conversa fora de hora", xp: 10, tipo: "ruim"},
     {id:7, texto: "Não fez a tarefa de casa", xp: 20, tipo: "ruim"},
     {id:8, texto: "Brigou um colega", xp: 10, tipo: "ruim"},
